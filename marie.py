@@ -8,7 +8,7 @@ import fiftyone.zoo as foz
 
 # ✨Marie prøver seg fram ✨IKKE KJØR DENNE KODEN, ALT KOMMER TIL Å KRÆSJE
 
-# laste ned datasettet, vet ikke om fifty one er en god ide
+# laste ned datasettet, vet ikke om fifty one er  en god ide
 dataset = foz.load_zoo_dataset(
     "coco-2017",
     split="validation",
