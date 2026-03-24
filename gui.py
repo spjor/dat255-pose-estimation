@@ -5,21 +5,36 @@ import torch
 import torchvision
 from torchvision import transforms
 
+#bruker gpuen hvis den er tilgjengelig, hvis ikke flytter den til cpu
 device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
 
+#her er modellen, lager noe defualt greier med keypoint rcnn og ferdig trent restnet, disse vektene er trent på coco-2017
 model = torchvision.models.detection.keypointrcnn_resnet50_fpn(weights="DEFAULT")
-model.eval()
+model.eval() #model evaluation mode
+print(model.eval())
 model.to(device)
+dummy_input = [torch.randn(3, 224, 224).to(device)]
+with torch.no_grad():
+    prediction = model(dummy_input)
+
+print(prediction)
 
 transform = transforms.ToTensor()
 
+#viser bare detections med 70% sikkerhet at de er en ekte person
 PERSON_SCORE_THRESHOLD = 0.7
-
+# COCO keypoint names
+COCO_KEYPOINTS = [
+    "nose", "left_eye", "right_eye", "left_ear", "right_ear",
+    "left_shoulder", "right_shoulder", "left_elbow", "right_elbow",
+    "left_wrist", "right_wrist", "left_hip", "right_hip",
+    "left_knee", "right_knee", "left_ankle", "right_ankle"
+]
 SKELETON = [
-    (5, 6),      # shoulders
+    (5, 6),      # skuldre
     (5, 7), (7, 9),
     (6, 8), (8, 10),
-    (11, 12),    # hips
+    (11, 12),    # hofter
     (5, 11), (6, 12),
     (11, 13), (13, 15),
     (12, 14), (14, 16),
@@ -38,19 +53,20 @@ def draw_pose(image, output):
         if scores[i] < PERSON_SCORE_THRESHOLD:
             continue
 
+
         box = boxes[i].tolist()
         kps = keypoints[i]
 
         # Draw box
-        draw.rectangle(box, outline="red", width=3)
+        draw.rectangle(box, outline="red", width=3) #tegner boks
 
-        # Draw skeleton lines
+        # tegner skjellett
         for a, b in SKELETON:
             xa, ya, _ = kps[a].tolist()
             xb, yb, _ = kps[b].tolist()
             draw.line((xa, ya, xb, yb), fill="lime", width=3)
 
-        # Draw keypoints
+        #tegner keypoints
         for kp in kps:
             x, y, _ = kp.tolist()
             r = 4
@@ -64,7 +80,7 @@ def analyze_image(file_path):
     img_tensor = transform(image).to(device)
 
     with torch.no_grad():
-        prediction = model([img_tensor])[0]
+        prediction = model([img_tensor])[0] #her bruker vi modellen igjen
 
     result = image.copy()
     result = draw_pose(result, prediction)
@@ -100,6 +116,7 @@ def open_image():
 root = tk.Tk()
 root.geometry("800x800")
 root.title("Pose Estimation")
+root.config(cursor="gumby") #denne settningen er veldig viktig
 
 status_label = tk.Label(root, text="Velkomen! Velg et bilde")
 status_label.pack(pady=20)
