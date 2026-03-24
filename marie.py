@@ -1,34 +1,54 @@
-import os
-import numpy as np
 import keras
-import tensorflow as tf
-import matplotlib.pyplot as plt
-import fiftyone
+import tensorflow
+import numpy
+import matplotlib
+import fiftyone as fo
 import fiftyone.zoo as foz
 
-# ✨Marie prøver seg fram ✨IKKE KJØR DENNE KODEN, ALT KOMMER TIL Å KRÆSJE
 
-# laste ned datasettet, vet ikke om fifty one er  en god ide
+if fo.dataset_exists("coco-2017-validation-50"):
+    fo.delete_dataset("coco-2017-validation-50")
+
+name = "coco-2017"
+
 dataset = foz.load_zoo_dataset(
     "coco-2017",
     split="validation",
-    label_types=["keypoints"],
-    classes=["person", "car"],
+    label_types=["keypoints"],   # or ["segmentations"], etc, depending on what you want
+    classes=["person"],
     max_samples=50,
 )
-"""
-#dette kan være enklere, BYTT UT
-ds, info = tfds.load('coco/2017',
-                      split='validation',
-                      with_info=True,
-                      data_dir='path/to/data')
-"""
-# Visualize the dataset in the FiftyOne App, laste ned data settet liker ikke fiftyone
-session = fiftyone.launch_app(dataset)
 
+
+# View summary info about the dataset
+print(dataset)
+
+# Print the first few samples in the dataset
+print(dataset.head())
+# Load directly from the zoo (changes are ephemeral)
+#dataset = foz.load_zoo_dataset("quickstart-groups")
+
+print(f"Dataset: {dataset.name}")
+print(f"Media type: {dataset.media_type}")
+print(f"Group slices: {dataset.group_slices}")
+print(f"Default slice: {dataset.default_group_slice}")
+#print(f"Num groups (scenes): {len(dataset.distinct('group.id'))}")
+
+#group_ids = dataset.distinct("group.id")
+#print(f"Total groups (scenes): {len(group_ids)}")
+
+# Examine first group
+#example_group = dataset.get_group(group_ids[0])
+#print(f"\nSamples in first group:")
+#for slice_name, sample in example_group.items():
+    #print(f"  {slice_name}: {sample.filepath.split('/')[-1]}")
+# Visualize the dataset in the FiftyOne App
+session = fo.launch_app(dataset)
+
+"""
 # Fjerne korrupte filer, tatt rett fra notebooks
 num_skipped = 0
-for folder_name in ("person", "car"):
+for folder_name in ("keypoints"):
     folder_path = os.path.join("coco-2017", folder_name)
     for fname in os.listdir(folder_path):
         fpath = os.path.join(folder_path, fname)
@@ -44,7 +64,8 @@ for folder_name in ("person", "car"):
             os.remove(fpath)
 
 print(f"Deleted {num_skipped} images.")
-
+"""
+"""
 # gjøre om filer til tall✨
 
 # dette er på ingen måte rett, dette må endres på
@@ -86,7 +107,6 @@ def preprocess_keypoints(image, keypoints, image_size=(180, 180)):
 
     return image, keypoints
 
-#todo: trene modellen
 model.compile(
     optimizer='adam',
     loss='mse',  # Mean squared error for coordinate regression
@@ -99,6 +119,7 @@ class VisualizePredictions(keras.callbacks.Callback):
         # Visualize some predictions
         pass
 
+#todo: trene modellen
 #todo: teste modellen
 #todo: datapipleline
 #todo: loss function
@@ -107,3 +128,4 @@ class VisualizePredictions(keras.callbacks.Callback):
 #todo: visualtisation
 #todo: post-processing, hva som ligger i dette? ikke spør meg. Men det er tydeligvis noe vi burde gjøre
 
+"""
