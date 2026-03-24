@@ -1,7 +1,4 @@
-import keras
-import tensorflow
-import numpy
-import matplotlib
+
 import fiftyone as fo
 import fiftyone.zoo as foz
 
@@ -20,7 +17,7 @@ def main():
         max_samples=50,
         shuffle=True,
         seed=51,
-        dataset_name=dataset_name,
+
     )
 
     model = foz.load_zoo_model("keypoint-rcnn-resnet50-fpn-coco-torch")

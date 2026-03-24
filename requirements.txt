@@ -1,4 +1,7 @@
-tensorflow~=2.21.0rc0
-keras~=3.13.2
-numpy~=1.26.4
-matplotlib~=3.9.2
+tensorflow
+keras
+numpy
+matplotlib
+fiftyone
+torch
+torchvision
