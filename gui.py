@@ -13,11 +13,21 @@ model = torchvision.models.detection.keypointrcnn_resnet50_fpn(weights="DEFAULT"
 model.eval() #model evaluation mode
 print(model.eval())
 model.to(device)
+
+
+def model1():
+    m = "her kommer modellen i guess"
+
+"""
+#dummy input for å teste modellen
 dummy_input = [torch.randn(3, 224, 224).to(device)]
 with torch.no_grad():
     prediction = model(dummy_input)
 
+print("prediction:")
 print(prediction)
+print("prediction: ferdig")
+"""
 
 transform = transforms.ToTensor()
 
