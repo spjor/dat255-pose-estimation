@@ -73,3 +73,5 @@ class ResNet(nn.Module):
         out = self.pool(out)
         out = self.dropout(out)
 
+        return out
+
