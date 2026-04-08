@@ -75,3 +75,6 @@ class ResNet(nn.Module):
 
         return out
 
+if __name__ == "__main__":
+    model = ResNet(input_channels=3, filters=64, kernel_size=3, stride=1, padding=1)
+    print(model)
