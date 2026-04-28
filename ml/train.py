@@ -213,14 +213,7 @@ def main(model):
         print('Training complete!')
 
 if __name__ == '__main__':
-    main(get_pose_resnet50(pretrained=True))
-    main(get_pose_resnet50(pretrained=False))
 
-    main(get_pose_resnet34(pretrained=True))
-    main(get_pose_resnet34(pretrained=False))
-
-    main(get_pose_resnet18(pretrained=True))
-    main(get_pose_resnet18(pretrained=False))
 
     main(get_pose_convnet())
 

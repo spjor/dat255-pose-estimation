@@ -3,12 +3,12 @@ from torch import nn
 
 class DeconvHead(nn.Module):
 
-    def __init__(self, in_channels, out_channels):
+    def __init__(self, in_channels, out_channels, num_layers=3):
         super().__init__()
         self.deconv_layers = nn.Sequential()
 
         channels = in_channels
-        for i in range(3):
+        for i in range(num_layers):
             self.deconv_layers.append(
                 nn.ConvTranspose2d(channels, channels // 2, kernel_size=4, stride=2, padding=1)
             )

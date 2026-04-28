@@ -76,7 +76,7 @@ def get_pose_resnet152(pretrained=False, **kwargs):
 
 def get_pose_convnet():
     backbone = ConvNetBackbone()
-    head = DeconvHead(1024, 17)
+    head = DeconvHead(1024, 17, 2)
 
     return PoseEstimationModel(backbone, head, name='pose_convnet')
 
