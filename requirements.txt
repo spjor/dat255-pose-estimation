@@ -6,3 +6,6 @@ fiftyone~=1.13.4
 pillow~=10.4.0
 tqdm~=4.66.5
 pycocotools
+cython
+wandb
+wandb[media]
